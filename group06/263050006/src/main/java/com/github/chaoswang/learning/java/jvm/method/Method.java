@@ -1,10 +1,14 @@
 package com.github.chaoswang.learning.java.jvm.method;
 
+import com.github.chaoswang.learning.java.jvm.attr.AttributeInfo;
 import com.github.chaoswang.learning.java.jvm.attr.CodeAttr;
 import com.github.chaoswang.learning.java.jvm.clz.ClassFile;
+import com.github.chaoswang.learning.java.jvm.constant.ConstantPool;
+import com.github.chaoswang.learning.java.jvm.constant.UTF8Info;
 import com.github.chaoswang.learning.java.jvm.loader.ByteCodeIterator;
 
 public class Method {
+	
 	private int accessFlag;
 	private int nameIndex;
 	private int descriptorIndex;
@@ -44,8 +48,47 @@ public class Method {
 	
 	
 	
+public String toString() {
+		
+		ConstantPool pool = this.clzFile.getConstantPool();
+		StringBuilder buffer = new StringBuilder();
+		
+		String name = ((UTF8Info)pool.getConstantInfo(this.nameIndex)).getValue();
+		
+		String desc = ((UTF8Info)pool.getConstantInfo(this.descriptorIndex)).getValue();
+		
+		buffer.append(name).append(":").append(desc).append("\n");
+		
+		buffer.append(this.codeAttr.toString(pool));
+		
+		return buffer.toString();
+	}
+	
 	public static Method parse(ClassFile clzFile, ByteCodeIterator iter){
-		return null;
+		int accessFlag = iter.nextU2ToInt();
+		int nameIndex = iter.nextU2ToInt();
+		int descIndex = iter.nextU2ToInt();
+		int attribCount = iter.nextU2ToInt();
+		
+		
+		Method m = new Method(clzFile, accessFlag, nameIndex, descIndex);
+		
+		for( int j=1; j<= attribCount; j++){
+			
+			int attrNameIndex = iter.nextU2ToInt();	
+			String attrName = clzFile.getConstantPool().getUTF8String(attrNameIndex);
+			iter.back(2);
+			
+			if(AttributeInfo.CODE.equalsIgnoreCase(attrName)){
+				CodeAttr codeAttr = CodeAttr.parse(clzFile, iter);
+				m.setCodeAttr(codeAttr);
+			} else{
+				throw new RuntimeException("only CODE attribute is implemented , please implement the "+ attrName);
+			}
+			
+		}
+		
+		return m ;
 		
 	}
 }

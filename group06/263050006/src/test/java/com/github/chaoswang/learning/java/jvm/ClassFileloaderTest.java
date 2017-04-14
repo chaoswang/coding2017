@@ -20,7 +20,7 @@ import com.github.chaoswang.learning.java.jvm.method.Method;
 
 public class ClassFileloaderTest {
 
-	private static final String FULL_QUALIFIED_CLASS_NAME = "com/github/chaoswang/learning/java/jvm/EmployeeV1";
+	private static final String FULL_QUALIFIED_CLASS_NAME = "com/coderising/jvm/test/EmployeeV1";
 //	static String path1 = "E:\\workspace_jee\\coding2017\\target\\test-classes";
 	static String path1 = "D:\\project\\workspace_1\\d-learning\\target\\test-classes";
 	static String path2 = "C:\temp";
@@ -29,7 +29,7 @@ public class ClassFileloaderTest {
 	static {
 		ClassFileLoader loader = new ClassFileLoader();
 		loader.addClassPath(path1);
-		String className = "com.github.chaoswang.learning.java.jvm.EmployeeV1";
+		String className = "EmployeeV1";
 
 		clzFile = loader.loadClass(className);
 		clzFile.print();
@@ -67,7 +67,7 @@ public class ClassFileloaderTest {
 		byte[] byteCodes = loader.readBinaryCode(className);
 
 		// 注意：这个字节数可能和你的JVM版本有关系， 你可以看看编译好的类到底有多大
-		Assert.assertEquals(1086, byteCodes.length);
+		Assert.assertEquals(1056, byteCodes.length);
 
 	}
 
@@ -75,7 +75,7 @@ public class ClassFileloaderTest {
 	public void testMagicNumber() {
 		ClassFileLoader loader = new ClassFileLoader();
 		loader.addClassPath(path1);
-		String className = "com.github.chaoswang.learning.java.jvm.EmployeeV1";
+		String className = "EmployeeV1";
 		byte[] byteCodes = loader.readBinaryCode(className);
 		byte[] codes = new byte[] { byteCodes[0], byteCodes[1], byteCodes[2], byteCodes[3] };
 
