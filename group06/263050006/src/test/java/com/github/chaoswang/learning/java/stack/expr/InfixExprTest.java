@@ -1,24 +1,12 @@
 package com.github.chaoswang.learning.java.stack.expr;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 
 public class InfixExprTest {
-
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
-
 	@Test
 	public void testEvaluate() {
-		//InfixExpr expr = new InfixExpr("300*20+12*5-20/4");
 		{
 			InfixExpr expr = new InfixExpr("2+3*4+5");
 			Assert.assertEquals(19.0, expr.evaluate(), 0.001f);

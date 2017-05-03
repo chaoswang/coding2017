@@ -6,23 +6,25 @@ import java.util.Stack;
 import com.github.chaoswang.learning.java.stack.operation.Operation;
 import com.github.chaoswang.learning.java.stack.operation.OperationFactory;
 
-/**
- * 中缀表达式是一种通用的算术或逻辑公式表示方法，操作符以中缀形式处于操作数的中间。
- * 中缀表达式是人们常用的算术表示方法。虽然人的大脑很容易理解与分析中缀表达式，
- * 但对计算机来说中缀表达式却是很复杂的，因此计算表达式的值时，通常需要先将中缀表达式转换为前缀或后缀表达式，
- * 然后再进行求值。对计算机来说，计算前缀或后缀表达式的值非常简单。
- *
- */
-public class InfixExpr {
+public class PostfixExpr {
+
 	String expr = null;
 	
-	public InfixExpr(String expr) {
+	public PostfixExpr(String expr) {
 		this.expr = expr;
 	}
 
-	public float evaluate() {		
-		List<Token> tokens = InfixToPostfix.convert(expr);
-		
+	/**
+	 * http://blog.csdn.net/antineutrino/article/details/6763722/
+	 * 从左至右扫描表达式，遇到数字时，将数字压入堆栈，遇到运算符时，弹出栈顶的两个数， 
+	 * 用运算符对它们做相应的计算（次顶元素 op 栈顶元素），并将结果入栈；
+	 * 重复上述过程直到表达式最右端，最后运算得出的值即为表达式的结果。
+	 * // 6*(5+(2+3)*8+3)
+	 * ("6 5 2 3 + 8 * + 3 + *");
+	 */
+	public float evaluate() {
+		TokenParser parser = new TokenParser();
+		List<Token> tokens  = parser.parse(expr);
 		Stack<Float> stack = new Stack<Float>();
 		for(Token token : tokens){
 			if(token.isNumber()){
@@ -37,4 +39,5 @@ public class InfixExpr {
 		}
 		return stack.pop();
 	}
+	
 }
