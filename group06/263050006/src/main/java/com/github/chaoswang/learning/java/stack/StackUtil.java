@@ -46,10 +46,9 @@ public class StackUtil {
 		Stack<Integer> tmpStack = new Stack<Integer>();
 		while(!s.empty()){
 			Integer poped = s.pop();
-			if(o.equals(poped)){
-				break;
+			if(!o.equals(poped)){
+				tmpStack.push(poped);
 			}
-			tmpStack.push(poped);
 		}
 		while(!tmpStack.empty()){
 			s.push(tmpStack.pop());
@@ -89,7 +88,7 @@ public class StackUtil {
 	 * @param s
 	 * @return
 	 */
-	public static boolean isValidPairs(String s) {
+	public static boolean isValidPairs_bad(String s) {
 		Map<Character,Character> map = new HashMap<Character,Character>();
 		map.put(')', '(');
 		map.put(']', '[');
@@ -120,5 +119,38 @@ public class StackUtil {
 		}
 		return true;
 	}
-
+	
+	public static boolean isValidPairs(String s){
+		Stack<Character> stack = new Stack();
+		for(int i=0;i<s.length();i++){
+			char c = s.charAt(i);
+			
+			if(c == '(' || c =='[' || c == '{'){
+				
+				stack.push(c);
+				
+			} else if( c == ')'){
+				
+				char topChar = stack.pop();
+				if(topChar != '('){
+					return false;
+				}
+				
+			} else if( c == ']'){
+				
+				char topChar = stack.pop();
+				if(topChar != '['){
+					return false;
+				}
+					
+			} else if( c == '}'){
+				
+				char topChar = stack.pop();
+				if(topChar != '{'){
+					return false;
+				}
+			}
+		}
+		return stack.size() == 0;
+	}
 }
